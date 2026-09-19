@@ -1,78 +1,76 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Register({ navigation }: any) {
-  const [nombre, setNombre] = useState("");
-  const [telefono, setTelefono] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleRegister = () => {
-    // Validación de campos obligatorios
-    if (!nombre || !telefono || !email || !password) {
-      setErrorMsg("Todos los campos son obligatorios");
+  // 1. Extraemos la función register de tu contexto, justo como en la imagen
+  const { register } = useAuth();
+
+  // 2. La función asíncrona exacta que pide la inge
+  const handleRegister = async () => {
+    // Pequeña validación extra para que no manden datos vacíos a Supabase
+    if (!email || !password) {
+      Alert.alert("Error", "Por favor llena todos los campos");
       return;
     }
-    
-    setErrorMsg("");
-    navigation.navigate("MainTabs", { email: nombre });
+
+    try {
+      // Intentamos registrar en Supabase
+      await register(email, password);
+      
+      // Si funciona, lo mandamos al login
+      navigation.navigate("LoginScreen");
+      
+    } catch (error: any) {
+      // El console.log de la pizarra para debuggear
+      console.log("error al registrarse: ", error.message);
+      
+      // Una alerta visual para que tú lo notes en el emulador
+      Alert.alert("Error al registrarse", error.message);
+    }
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.title}>Crear Cuenta</Text>
-      
-      <CustomInput
-        onChangeText={setNombre}
-        value={nombre}
-        placeholder={"Nombre completo"}
-        type="default"
-      />
-
-      <CustomInput
-        onChangeText={setTelefono}
-        value={telefono}
-        placeholder={"Número de teléfono"}
-        type="number" 
-      />
 
       <CustomInput
         onChangeText={setEmail}
         value={email}
-        placeholder={"Correo electrónico"}
+        placeholder={"Ingresa tu email"}
         type="email"
       />
 
       <CustomInput
         onChangeText={setPassword}
         value={password}
-        placeholder={"Contraseña"}
+        placeholder={"Crea tu contraseña"}
         type="password"
       />
 
-      {errorMsg ? <Text style={styles.errorText}>{errorMsg}</Text> : null}
+      <CustomButton
+        title="Registrarse"
+        onPress={handleRegister}
+      />
 
-      <CustomButton 
-        title="Registrarse" 
-        onPress={handleRegister} 
+      <CustomButton
+        title="Volver al Login"
+        onPress={() => navigation.navigate("LoginScreen")}
+        variant="secondary" // Usando el botón secundario que ya tenías configurado
       />
-      
-      <CustomButton 
-        title="Volver al Login" 
-        onPress={() => navigation.goBack()} 
-        variant="secondary"
-      />
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    backgroundColor: "#fff",
+    flex: 1,
+    backgroundColor: "#F5F5F5",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
@@ -80,12 +78,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    color: "navy",
     marginBottom: 20,
-    color: "navy"
   },
-  errorText: {
-    color: "red",
-    marginBottom: 10,
-    fontWeight: "500",
-  }
 });
