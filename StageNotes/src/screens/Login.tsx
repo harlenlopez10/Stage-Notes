@@ -8,29 +8,28 @@ export default function Login({ navigation }: any) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-const { login } = useAuth(); // Sacamos la función del contexto
+const { login } = useAuth(); 
 
-  // Función asíncrona para iniciar sesión
+  
   const handleLogin = async () => {
-    // Validación básica de campos vacíos
+   
     if (!email || !password) {
       Alert.alert("Error", "Ingresa tu email y contraseña");
       return;
     }
 
     try {
-      // 1. Intentamos loguearnos en Supabase
+      
       await login(email, password);
       
-      // 2. Si pasa de la línea anterior (no tira error), todo salió bien
-      // Navegamos al MainTabs pasando el email
+     
       navigation.navigate("MainTabs", { email });
       
     } catch (error: any) {
-      // 3. Si la clave está mal o el usuario no existe, cae aquí
+      
       console.log("Error al iniciar sesión:", error.message);
       
-      // Muestra una alerta amigable (Supabase manda el error en inglés usualmente)
+
       Alert.alert("Error real de Supabase", error.message);
     }
   };

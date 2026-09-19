@@ -8,29 +8,29 @@ export default function Register({ navigation }: any) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // 1. Extraemos la función register de tu contexto, justo como en la imagen
+
   const { register } = useAuth();
 
-  // 2. La función asíncrona exacta que pide la inge
+  //La función asíncrona exacta que pide la inge
   const handleRegister = async () => {
-    // Pequeña validación extra para que no manden datos vacíos a Supabase
+
     if (!email || !password) {
       Alert.alert("Error", "Por favor llena todos los campos");
       return;
     }
 
     try {
-      // Intentamos registrar en Supabase
+     
       await register(email, password);
       
-      // Si funciona, lo mandamos al login
+     
       navigation.navigate("LoginScreen");
       
     } catch (error: any) {
-      // El console.log de la pizarra para debuggear
+      
       console.log("error al registrarse: ", error.message);
       
-      // Una alerta visual para que tú lo notes en el emulador
+      
       Alert.alert("Error al registrarse", error.message);
     }
   };
@@ -61,7 +61,7 @@ export default function Register({ navigation }: any) {
       <CustomButton
         title="Volver al Login"
         onPress={() => navigation.navigate("LoginScreen")}
-        variant="secondary" // Usando el botón secundario que ya tenías configurado
+        variant="secondary" 
       />
     </View>
   );
