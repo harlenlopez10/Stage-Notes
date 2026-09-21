@@ -1,17 +1,37 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { TabsParamList } from "../navigation/TabNavigator";
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { useTheme } from '../contexts/ThemeContext';
+import CustomButton from '../components/CustomButton';
+import Card from '../components/Card';
 
-type HomeProps = BottomTabScreenProps<TabsParamList, 'HomeTab'>;
+export default function HomeScreen() {
+  const { colors } = useTheme();
 
-export default function Home({ route }: HomeProps){
-    const { email } = route.params;
+  return (
+    <ScrollView 
+      style={{ backgroundColor: colors.background }}
+      contentContainerStyle={styles.container}
+    >
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>Variantes de Botón</Text>
+      <CustomButton title='Botón Primario' onPress={() => {}} variant='primary' />
+      <CustomButton title='Botón Secundario' onPress={() => {}} variant='secondary' />
+      <CustomButton title='Botón Terciario' onPress={() => {}} variant='tertiary' />
 
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Bienvenido a StageNotes</Text>
-            <Text>{email}</Text>
-        </View>
-    )
+      <Text style={[styles.sectionTitle, { color: colors.text }]}>Tarjetas</Text>
+      <Card 
+        title='Notificaciones' 
+        icon='notifications' 
+        description='Revisa tus alertas y mensajes recientes.' 
+      />
+      <Card 
+        title='Actividad' 
+        icon='pulse' 
+        description='Consulta tu historial de actividad reciente.' 
+      />
+    </ScrollView>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: { padding: 24, paddingBottom: 40 },
+  sectionTitle: { fontSize: 20, fontWeight: '700', marginTop: 24, marginBottom: 12 },
+});

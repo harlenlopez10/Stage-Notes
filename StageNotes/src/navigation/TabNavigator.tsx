@@ -1,53 +1,40 @@
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons"; 
-import Home from "../screens/Home";
-import Profile from "../screens/features/Profile";
-import Settings from "../screens/features/Settings";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '../contexts/ThemeContext';
+import HomeScreen from '../screens/Home';
+import ExploreScreen from '../screens/ExploreScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
-export type TabsParamList = {
-    HomeTab: { email: string };
-    Profile: undefined;
-    Settings: undefined;
-};
+const Tab = createBottomTabNavigator();
 
-const Tab = createBottomTabNavigator<TabsParamList>();
+export default function TabsNavigator() {
+  const { colors } = useTheme();
 
-export default function TabNavigator({ route }: any) {
-    const email = route?.params?.email || "Usuario";
-
-    return (
-        <Tab.Navigator
-            screenOptions={{
-                tabBarActiveTintColor: "navy",
-                tabBarInactiveTintColor: "gray",
-            }}
-        >
-            <Tab.Screen 
-                name="HomeTab" 
-                component={Home} 
-                initialParams={{ email }} 
-                options={{
-                    title: "Inicio",
-                    tabBarIcon: ({ color }) => <Ionicons name="musical-notes" size={24} color={color} />
-                }}
-            />
-            <Tab.Screen 
-                name="Profile" 
-                component={Profile} 
-                options={{
-                    title: "Perfil",
-                    tabBarIcon: ({ color }) => <Ionicons name="person" size={24} color={color} />
-                }}
-            />
-            <Tab.Screen 
-                name="Settings" 
-                component={Settings} 
-                options={{
-                    title: "Ajustes",
-                    tabBarIcon: ({ color }) => <Ionicons name="settings" size={24} color={color} />
-                }}
-            />
-        </Tab.Navigator>
-    )
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textSecondary,
+        tabBarStyle: { backgroundColor: colors.surface },
+        headerStyle: { backgroundColor: colors.surface },
+        headerTintColor: colors.text,
+      }}
+    >
+      <Tab.Screen 
+        name='Inicio' 
+        component={HomeScreen} 
+        options={{ tabBarIcon: ({ color, size }) => <Ionicons name='home' size={size} color={color} /> }} 
+      />
+      <Tab.Screen 
+        name='Explorar' 
+        component={ExploreScreen} 
+        options={{ tabBarIcon: ({ color, size }) => <Ionicons name='grid' size={size} color={color} /> }} 
+      />
+      <Tab.Screen 
+        name='Configuración' 
+        component={SettingsScreen} 
+        options={{ tabBarIcon: ({ color, size }) => <Ionicons name='settings' size={size} color={color} /> }} 
+      />
+    </Tab.Navigator>
+  );
 }
