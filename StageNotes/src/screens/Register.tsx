@@ -12,6 +12,8 @@ export default function Register({ navigation }: any) {
   const { register } = useAuth();
 
   //La función asíncrona exacta que pide la inge
+
+  // PROBANDOOOOOO
   const handleRegister = async () => {
 
     if (!email || !password) {
