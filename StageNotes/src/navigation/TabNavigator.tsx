@@ -1,47 +1,55 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons"; 
-import Home from "../screens/Home";
+import { Ionicons } from "@expo/vector-icons";
 import Profile from "../screens/features/Profile";
 import Settings from "../screens/features/Settings";
+import { useTheme } from "../contexts/ThemeContext"; 
+import Transportador from "../screens/features/Transportador";
+import Metronomo from "../screens/features/Metronomo";
 
 export type TabsParamList = {
-    HomeTab: { email: string };
-    Profile: undefined;
-    Settings: undefined;
+    TransportadorTab: undefined;
+    MetronomoTab: undefined;
+    SettingsTab: undefined;
 };
 
 const Tab = createBottomTabNavigator<TabsParamList>();
 
 export default function TabNavigator({ route }: any) {
     const email = route?.params?.email || "Usuario";
+    const { colors } = useTheme(); 
 
     return (
         <Tab.Navigator
             screenOptions={{
-                tabBarActiveTintColor: "navy",
+                tabBarStyle: { backgroundColor: colors.background },
+                headerStyle: { backgroundColor: colors.background },
+                headerTintColor: colors.text,
+                tabBarActiveTintColor: colors.primary || "navy",
                 tabBarInactiveTintColor: "gray",
             }}
         >
+          
             <Tab.Screen 
-                name="HomeTab" 
-                component={Home} 
-                initialParams={{ email }} 
+                name="TransportadorTab" 
+                component={Transportador} 
                 options={{
-                    title: "Inicio",
-                    tabBarIcon: ({ color }) => <Ionicons name="musical-notes" size={24} color={color} />
+                    title: "Acordes",
+                    tabBarIcon: ({ color }) => <Ionicons name="document-text" size={24} color={color} />
                 }}
             />
+            
             <Tab.Screen 
-                name="Profile" 
-                component={Profile} 
+                name="MetronomoTab" 
+                component={Metronomo} 
                 options={{
-                    title: "Perfil",
-                    tabBarIcon: ({ color }) => <Ionicons name="person" size={24} color={color} />
+                    title: "Tempo",
+                    tabBarIcon: ({ color }) => <Ionicons name="pulse" size={24} color={color} />
                 }}
             />
+        
             <Tab.Screen 
-                name="Settings" 
+                name="SettingsTab" 
                 component={Settings} 
                 options={{
                     title: "Ajustes",

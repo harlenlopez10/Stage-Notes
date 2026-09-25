@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "c5613ee8-347d-4df6-8011-ff39e295a779"
+      }
+    },
+    "android": {
+      "package": "com.harlenlopez.stagenotes"
+    }
+  }
+}
